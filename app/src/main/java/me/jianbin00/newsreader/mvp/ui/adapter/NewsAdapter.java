@@ -21,8 +21,9 @@ import java.util.List;
 
 import me.jessyan.art.base.BaseHolder;
 import me.jessyan.art.base.DefaultAdapter;
-import me.jianbin00.newsreader.mvp.model.entity.User;
-import me.jianbin00.newsreader.mvp.ui.holder.UserItemHolder;
+import me.jianbin00.newsreader.R;
+import me.jianbin00.newsreader.mvp.model.entity.News;
+import me.jianbin00.newsreader.mvp.ui.holder.NewsItemHolder;
 
 /**
  * ================================================
@@ -33,22 +34,22 @@ import me.jianbin00.newsreader.mvp.ui.holder.UserItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class UserAdapter extends DefaultAdapter<User>
+public class NewsAdapter extends DefaultAdapter<News>
 {
-    public UserAdapter(List<User> infos)
+    public NewsAdapter(List<News> infos)
     {
         super(infos);
     }
 
     @Override
-    public BaseHolder<User> getHolder(View v, int viewType)
+    public BaseHolder<News> getHolder(View v, int viewType)
     {
-        return new UserItemHolder(v);
+        return new NewsItemHolder(v);
     }
 
     @Override
     public int getLayoutId(int viewType)
     {
-        return me.jianbin00.newsreader.R.layout.recycle_list;
+        return R.layout.recycle_list;
     }
 }
