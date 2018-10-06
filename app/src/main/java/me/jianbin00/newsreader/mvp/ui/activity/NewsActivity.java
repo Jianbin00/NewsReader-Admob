@@ -35,8 +35,8 @@ import me.jessyan.art.mvp.Message;
 import me.jessyan.art.utils.ArtUtils;
 import me.jessyan.art.utils.Preconditions;
 import me.jianbin00.newsreader.R;
-import me.jianbin00.newsreader.mvp.presenter.UserPresenter;
-import me.jianbin00.newsreader.mvp.ui.adapter.UserAdapter;
+import me.jianbin00.newsreader.mvp.presenter.NewsPresenter;
+import me.jianbin00.newsreader.mvp.ui.adapter.NewsAdapter;
 
 
 /**
@@ -48,7 +48,7 @@ import me.jianbin00.newsreader.mvp.ui.adapter.UserAdapter;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class UserActivity extends BaseActivity<UserPresenter> implements IView, SwipeRefreshLayout.OnRefreshListener
+public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, SwipeRefreshLayout.OnRefreshListener
 {
 
     @BindView(R.id.recyclerView)
@@ -59,13 +59,13 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IView, 
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private RxPermissions mRxPermissions;
-    private UserAdapter mAdapter;
+    private NewsAdapter mAdapter;
 
 
     @Override
     public int initView(@Nullable Bundle savedInstanceState)
     {
-        return me.jianbin00.newsreader.R.layout.activity_user;
+        return R.layout.activity_user;
     }
 
     @Override
@@ -79,11 +79,11 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IView, 
 
     @Override
     @Nullable
-    public UserPresenter obtainPresenter()
+    public NewsPresenter obtainPresenter()
     {
         this.mRxPermissions = new RxPermissions(this);
-        this.mAdapter = new UserAdapter(new ArrayList<>());
-        return new UserPresenter(ArtUtils.obtainAppComponentFromContext(this), mAdapter, mRxPermissions);
+        this.mAdapter = new NewsAdapter(new ArrayList<>());
+        return new NewsPresenter(ArtUtils.obtainAppComponentFromContext(this), mAdapter, mRxPermissions);
     }
 
 
@@ -150,7 +150,7 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IView, 
                 @Override
                 public void onLoadMore()
                 {
-                    mPresenter.requestUsers(Message.obtain(UserActivity.this, new Object[]{false}));
+                    mPresenter.requestUsers(Message.obtain(NewsActivity.this, new Object[]{false}));
                 }
 
                 @Override

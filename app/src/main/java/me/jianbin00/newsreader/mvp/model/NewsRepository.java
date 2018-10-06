@@ -27,7 +27,7 @@ import me.jessyan.art.mvp.IModel;
 import me.jessyan.art.mvp.IRepositoryManager;
 import me.jianbin00.newsreader.mvp.model.api.cache.CommonCache;
 import me.jianbin00.newsreader.mvp.model.api.service.UserService;
-import me.jianbin00.newsreader.mvp.model.entity.User;
+import me.jianbin00.newsreader.mvp.model.entity.News;
 
 /**
  * ================================================
@@ -41,10 +41,9 @@ import me.jianbin00.newsreader.mvp.model.entity.User;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class UserRepository implements IModel
+public class NewsRepository implements IModel
 {
 
-    public static final int USERS_PER_PAGE = 10;
     private IRepositoryManager mManager;
 
     /**
@@ -52,26 +51,26 @@ public class UserRepository implements IModel
      *
      * @param manager
      */
-    public UserRepository(IRepositoryManager manager)
+    public NewsRepository(IRepositoryManager manager)
     {
         this.mManager = manager;
     }
 
 
-    public Observable<List<User>> getUsers(int lastIdQueried, boolean update)
+    public Observable<List<News>> getTopNewsFromSource(String source, boolean update)
     {
         //使用rxcache缓存,上拉刷新则不读取缓存,加载更多读取缓存
         return Observable.just(mManager
                 .createRetrofitService(UserService.class)
-                .getUsers(lastIdQueried, USERS_PER_PAGE))
-                .flatMap(new Function<Observable<List<User>>, ObservableSource<List<User>>>()
+                .getTopNewsFromSource(source))
+                .flatMap(new Function<Observable<List<News>>, ObservableSource<List<News>>>()
                 {
                     @Override
-                    public ObservableSource<List<User>> apply(@NonNull Observable<List<User>> listObservable) throws Exception
+                    public ObservableSource<List<News>> apply(@NonNull Observable<List<News>> listObservable) throws Exception
                     {
                         return mManager.createCacheService(CommonCache.class)
-                                .getUsers(listObservable
-                                        , new DynamicKey(lastIdQueried)
+                                .getNews(listObservable
+                                        , new DynamicKey(source)
                                         , new EvictDynamicKey(update))
                                 .map(listReply -> listReply.getData());
                     }

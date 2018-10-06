@@ -18,7 +18,8 @@ package me.jianbin00.newsreader.mvp.model.api.service;
 import java.util.List;
 
 import io.reactivex.Observable;
-import me.jianbin00.newsreader.mvp.model.entity.User;
+import me.jianbin00.newsreader.BuildConfig;
+import me.jianbin00.newsreader.mvp.model.entity.News;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -36,9 +37,22 @@ import retrofit2.http.Query;
  */
 public interface UserService
 {
-    String HEADER_API_VERSION = "Accept: application/vnd.github.v3+json";
+    String API_HEADER = "X-Api-Key";
+    String API_KEY = BuildConfig.NEWSAPI_KEY;
 
-    @Headers({HEADER_API_VERSION})
-    @GET("/users")
-    Observable<List<User>> getUsers(@Query("since") int lastIdQueried, @Query("per_page") int perPage);
+    @Headers({API_HEADER + API_KEY})
+    @GET("/v2/top-headlines")
+    Observable<List<News>> getTopNewsFromSource(@Query("sources") String source);
+
+    @Headers({API_HEADER + API_KEY})
+    @GET("/v2/top-headlines")
+    Observable<List<News>> getTopNewsFromCountry(@Query("country") String country);
+
+    @Headers({API_HEADER + API_KEY})
+    @GET("/v2/top-headlines")
+    Observable<List<News>> getTopNewsFromLanguage(@Query("language") String language);
+
+    @Headers({API_HEADER + API_KEY})
+    @GET("/v2/top-headlines")
+    Observable<List<News>> getTopNewsFromCategoryAndCountry(@Query("category") String category, @Query("country") String country);
 }

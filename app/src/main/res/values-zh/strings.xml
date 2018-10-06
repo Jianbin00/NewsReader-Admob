@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">新闻阅读器</string>
+    <string name="unknown_error">未知错误</string>
+    <string name="network_unavailable">网络不可用</string>
+    <string name="request_timeout">请求网络超时</string>
+    <string name="data_parsing_error">数据解析错误</string>
+    <string name="internal_server_error">服务器发生错误</string>
+    <string name="not_found">请求地址不存在</string>
+    <string name="forbidden">请求被服务器拒绝</string>
+    <string name="temporary_redirect">请求被重定向到其他页面</string>
+    <string name="too_many_requests">太多请求</string>
+    <string name="unauthorized">未授权</string>
+    <string name="bad_request">错误的请求</string>
+    <string name="exit">退出</string>
+</resources>

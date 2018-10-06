@@ -36,8 +36,8 @@ import me.jessyan.art.utils.PermissionUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
-import me.jianbin00.newsreader.mvp.model.UserRepository;
-import me.jianbin00.newsreader.mvp.model.entity.User;
+import me.jianbin00.newsreader.mvp.model.NewsRepository;
+import me.jianbin00.newsreader.mvp.model.entity.News;
 import timber.log.Timber;
 
 /**
@@ -49,22 +49,22 @@ import timber.log.Timber;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class UserPresenter extends BasePresenter<UserRepository>
+public class NewsPresenter extends BasePresenter<NewsRepository>
 {
     private RxErrorHandler mErrorHandler;
     private RxPermissions mRxPermissions;
-    private List<User> mUsers = new ArrayList<>();
+    private List<News> mNews = new ArrayList<>();
     private DefaultAdapter mAdapter;
-    private int lastUserId = 1;
+    private String source = "usa-today";
     private boolean isFirst = true;
     private int preEndIndex;
 
 
-    public UserPresenter(AppComponent appComponent, DefaultAdapter adapter, RxPermissions rxPermissions)
+    public NewsPresenter(AppComponent appComponent, DefaultAdapter adapter, RxPermissions rxPermissions)
     {
-        super(appComponent.repositoryManager().createRepository(UserRepository.class));
+        super(appComponent.repositoryManager().createRepository(NewsRepository.class));
         this.mAdapter = adapter;
-        this.mUsers = adapter.getInfos();
+        this.mNews = adapter.getInfos();
         this.mErrorHandler = appComponent.rxErrorHandler();
         this.mRxPermissions = rxPermissions;
     }
@@ -106,7 +106,7 @@ public class UserPresenter extends BasePresenter<UserRepository>
         }, mRxPermissions, mErrorHandler);
 
 
-        if (pullToRefresh) lastUserId = 1;//下拉刷新默认只请求第一页
+        //if (pullToRefresh) lastUserId = 1;//下拉刷新默认只请求第一页
 
         //关于RxCache缓存库的使用请参考 http://www.jianshu.com/p/b58ef6b0624b
 
@@ -118,7 +118,7 @@ public class UserPresenter extends BasePresenter<UserRepository>
             isEvictCache = false;
         }
 
-        mModel.getUsers(lastUserId, isEvictCache)
+        mModel.getTopNewsFromSource(source, isEvictCache)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(disposable -> {
@@ -148,22 +148,26 @@ public class UserPresenter extends BasePresenter<UserRepository>
                         msg.handleMessageToTarget();//方法最后必须调HandleMessageToTarget,将消息所有引用清空后回收进消息池
                     }
                 })
-                .subscribe(new ErrorHandleSubscriber<List<User>>(mErrorHandler)
+                .subscribe(new ErrorHandleSubscriber<List<News>>(mErrorHandler)
                 {
                     @Override
-                    public void onNext(List<User> users)
+                    public void onNext(List<News> news)
                     {
-                        lastUserId = users.get(users.size() - 1).getId();//记录最后一个id,用于下一次请求
+                        //lastUserId = users.get(users.size() - 1).getId();//记录最后一个id,用于下一次请求
 
-                        if (pullToRefresh) mUsers.clear();//如果是下拉刷新则清空列表
+                        //if (pullToRefresh) mNews.clear();//如果是下拉刷新则清空列表
 
-                        preEndIndex = mUsers.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                        mUsers.addAll(users);
+                        mNews.clear();//清空列表以刷新
+
+                        //preEndIndex = mNews.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                        mNews.addAll(news);
 
                         if (pullToRefresh)
                             mAdapter.notifyDataSetChanged();
-                        else
-                            mAdapter.notifyItemRangeInserted(preEndIndex, users.size());
+
+                        //Jianbin：去除下面代码即只有下拉刷新
+/*                        else
+                            mAdapter.notifyItemRangeInserted(preEndIndex, news.size());*/
                     }
                 });
     }
@@ -173,7 +177,7 @@ public class UserPresenter extends BasePresenter<UserRepository>
     {
         super.onDestroy();
         this.mAdapter = null;
-        this.mUsers = null;
+        this.mNews = null;
         this.mErrorHandler = null;
     }
 }

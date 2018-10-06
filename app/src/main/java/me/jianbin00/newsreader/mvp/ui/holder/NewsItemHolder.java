@@ -28,7 +28,7 @@ import me.jessyan.art.http.imageloader.ImageLoader;
 import me.jessyan.art.http.imageloader.glide.ImageConfigImpl;
 import me.jessyan.art.utils.ArtUtils;
 import me.jianbin00.newsreader.R;
-import me.jianbin00.newsreader.mvp.model.entity.User;
+import me.jianbin00.newsreader.mvp.model.entity.News;
 
 /**
  * ================================================
@@ -39,17 +39,25 @@ import me.jianbin00.newsreader.mvp.model.entity.User;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class UserItemHolder extends BaseHolder<User>
+public class NewsItemHolder extends BaseHolder<News>
 {
 
-    @BindView(R.id.iv_avatar)
-    ImageView mAvatar;
-    @BindView(R.id.tv_name)
-    TextView mName;
+    @BindView(R.id.iv_image)
+    ImageView mImage;
+    @BindView(R.id.tv_title)
+    TextView mTitle;
+    @BindView(R.id.tv_author)
+    TextView mAuthor;
+    @BindView(R.id.tv_published_time)
+    TextView mPublishedTime;
+    @BindView(R.id.tv_content)
+    TextView mContent;
+
+
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
 
-    public UserItemHolder(View itemView)
+    public NewsItemHolder(View itemView)
     {
         super(itemView);
         //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
@@ -58,17 +66,20 @@ public class UserItemHolder extends BaseHolder<User>
     }
 
     @Override
-    public void setData(User data, int position)
+    public void setData(News data, int position)
     {
-
-        mName.setText(data.getLogin());
+        News.ArticlesBean article = data.getArticles().get(position);
+        mTitle.setText(article.getTitle());
+        mAuthor.setText(article.getAuthor());
+        mPublishedTime.setText(article.getPublishedAt());
+        mContent.setText(article.getContent());
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .url(data.getAvatarUrl())
-                        .imageView(mAvatar)
+                        .url(article.getUrl())
+                        .imageView(mImage)
                         .build());
     }
 
@@ -82,10 +93,10 @@ public class UserItemHolder extends BaseHolder<User>
         //只要传入的 Context 为 Activity, Glide 就会自己做好生命周期的管理, 其实在上面的代码中传入的 Context 就是 Activity
         //所以在 onRelease 方法中不做 clear 也是可以的, 但是在这里想展示一下 clear 的用法
         mImageLoader.clear(mAppComponent.application(), ImageConfigImpl.builder()
-                .imageViews(mAvatar)
+                .imageViews(mImage)
                 .build());
-        this.mAvatar = null;
-        this.mName = null;
+        this.mImage = null;
+        this.mTitle = null;
         this.mAppComponent = null;
         this.mImageLoader = null;
     }

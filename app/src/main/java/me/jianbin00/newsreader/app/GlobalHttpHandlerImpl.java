@@ -25,7 +25,8 @@ import java.util.List;
 import me.jessyan.art.http.GlobalHttpHandler;
 import me.jessyan.art.http.log.RequestInterceptor;
 import me.jessyan.art.utils.ArtUtils;
-import me.jianbin00.newsreader.mvp.model.entity.User;
+import me.jianbin00.newsreader.BuildConfig;
+import me.jianbin00.newsreader.mvp.model.entity.News;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -43,6 +44,8 @@ import timber.log.Timber;
 public class GlobalHttpHandlerImpl implements GlobalHttpHandler
 {
     private Context context;
+    private static final String API_HEADER = "X-Api-Key";
+    private static final String API_KEY = BuildConfig.NEWSAPI_KEY;
 
     public GlobalHttpHandlerImpl(Context context)
     {
@@ -56,7 +59,7 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler
      * @param httpResult 服务器返回的结果 (已被框架自动转换为字符串)
      * @param chain      {@link okhttp3.Interceptor.Chain}
      * @param response   {@link Response}
-     * @return
+     * @return response   {@link Response}
      */
     @Override
     public Response onHttpResultResponse(String httpResult, Interceptor.Chain chain, Response response)
@@ -65,11 +68,11 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler
         {
             try
             {
-                List<User> list = ArtUtils.obtainAppComponentFromContext(context).gson().fromJson(httpResult, new TypeToken<List<User>>()
+                List<News> list = ArtUtils.obtainAppComponentFromContext(context).gson().fromJson(httpResult, new TypeToken<List<News>>()
                 {
                 }.getType());
-                User user = list.get(0);
-                Timber.w("Result ------> " + user.getLogin() + "    ||   Avatar_url------> " + user.getAvatarUrl());
+                News news = list.get(0);
+                Timber.w("Status ------> " + news.getStatus() + "    ||   TotalResults------> " + news.getTotalResults());
             } catch (Exception e)
             {
                 e.printStackTrace();
@@ -96,14 +99,16 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler
      *
      * @param chain   {@link okhttp3.Interceptor.Chain}
      * @param request {@link Request}
-     * @return
+     * @return request {@link Request}
      */
     @Override
     public Request onHttpRequestBefore(Interceptor.Chain chain, Request request)
     {
-        /* 如果需要再请求服务器之前做一些操作, 则重新返回一个做过操作的的 Request 如增加 Header, 不做操作则直接返回参数 request
-        return chain.request().newBuilder().header("token", tokenId)
-                              .build(); */
-        return request;
+        /* 如果需要再请求服务器之前做一些操作, 则重新返回一个做过操作的的 Request 如增加 Header, 不做操作则直接返回参数 request*/
+        Timber.w("request:" + request.toString());
+        return chain.request().newBuilder().header(API_HEADER, API_KEY)
+                .build();
+
+        //return request;
     }
 }

@@ -24,7 +24,7 @@ import io.rx_cache2.EvictProvider;
 import io.rx_cache2.LifeCache;
 import io.rx_cache2.Reply;
 import io.rx_cache2.internal.RxCache;
-import me.jianbin00.newsreader.mvp.model.entity.User;
+import me.jianbin00.newsreader.mvp.model.entity.News;
 
 /**
  * ================================================
@@ -39,5 +39,5 @@ public interface CommonCache
 {
 
     @LifeCache(duration = 2, timeUnit = TimeUnit.MINUTES)
-    Observable<Reply<List<User>>> getUsers(Observable<List<User>> users, DynamicKey idLastUserQueried, EvictProvider evictProvider);
+    Observable<Reply<List<News>>> getNews(Observable<List<News>> news, DynamicKey key, EvictProvider evictProvider);
 }

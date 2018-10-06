@@ -1,3 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MVPArt</string>
+    <string name="app_name">News Reader</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="network_unavailable">Network is not available</string>
+    <string name="request_timeout">Request timeout</string>
+    <string name="data_parsing_error">Data parsing error</string>
+    <string name="internal_server_error">Internal Server Error</string>
+    <string name="not_found">Not Found</string>
+    <string name="forbidden">Forbidden</string>
+    <string name="temporary_redirect">Temporary Redirect</string>
+    <string name="too_many_requests">Too Many Requests</string>
+    <string name="unauthorized">Unauthorized</string>
+    <string name="bad_request">Bad Request</string>
+    <!--<string name="title_activity_news_page">NewsPageActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>-->
+    <string name="exit">Exit</string>
 </resources>
