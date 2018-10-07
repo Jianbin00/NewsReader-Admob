@@ -65,7 +65,7 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
     @Override
     public int initView(@Nullable Bundle savedInstanceState)
     {
-        return R.layout.activity_user;
+        return R.layout.activity_news;
     }
 
     @Override

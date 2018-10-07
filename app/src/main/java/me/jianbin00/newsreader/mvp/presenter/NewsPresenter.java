@@ -57,7 +57,7 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
     private DefaultAdapter mAdapter;
     private String source = "usa-today";
     private boolean isFirst = true;
-    private int preEndIndex;
+    //private int preEndIndex;
 
 
     public NewsPresenter(AppComponent appComponent, DefaultAdapter adapter, RxPermissions rxPermissions)

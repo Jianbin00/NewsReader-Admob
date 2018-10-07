@@ -26,7 +26,7 @@ import io.rx_cache2.EvictDynamicKey;
 import me.jessyan.art.mvp.IModel;
 import me.jessyan.art.mvp.IRepositoryManager;
 import me.jianbin00.newsreader.mvp.model.api.cache.CommonCache;
-import me.jianbin00.newsreader.mvp.model.api.service.UserService;
+import me.jianbin00.newsreader.mvp.model.api.service.NewsService;
 import me.jianbin00.newsreader.mvp.model.entity.News;
 
 /**
@@ -61,7 +61,7 @@ public class NewsRepository implements IModel
     {
         //使用rxcache缓存,上拉刷新则不读取缓存,加载更多读取缓存
         return Observable.just(mManager
-                .createRetrofitService(UserService.class)
+                .createRetrofitService(NewsService.class)
                 .getTopNewsFromSource(source))
                 .flatMap(new Function<Observable<List<News>>, ObservableSource<List<News>>>()
                 {

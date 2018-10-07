@@ -35,7 +35,7 @@ import retrofit2.http.Query;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public interface UserService
+public interface NewsService
 {
     String API_HEADER = "X-Api-Key";
     String API_KEY = BuildConfig.NEWSAPI_KEY;

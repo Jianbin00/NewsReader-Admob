@@ -14,7 +14,7 @@
         android:background="@color/white">
 
         <TextView
-            android:id="@+id/tv_author"
+            android:id="@+id/tv_source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -86,10 +86,10 @@
             android:layout_marginStart="16dp"
             android:textColor="@color/black"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_author"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_source"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/tv_author"
+            app:layout_constraintStart_toEndOf="@+id/tv_source"
             tools:text="2018-10-05T04:02:38Z"/>
     </android.support.constraint.ConstraintLayout>
 

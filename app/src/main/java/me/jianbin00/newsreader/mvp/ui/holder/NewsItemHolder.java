@@ -46,8 +46,8 @@ public class NewsItemHolder extends BaseHolder<News>
     ImageView mImage;
     @BindView(R.id.tv_title)
     TextView mTitle;
-    @BindView(R.id.tv_author)
-    TextView mAuthor;
+    @BindView(R.id.tv_source)
+    TextView mSource;
     @BindView(R.id.tv_published_time)
     TextView mPublishedTime;
     @BindView(R.id.tv_content)
@@ -70,7 +70,7 @@ public class NewsItemHolder extends BaseHolder<News>
     {
         News.ArticlesBean article = data.getArticles().get(position);
         mTitle.setText(article.getTitle());
-        mAuthor.setText(article.getAuthor());
+        mSource.setText(article.getSource().getName());
         mPublishedTime.setText(article.getPublishedAt());
         mContent.setText(article.getContent());
 
