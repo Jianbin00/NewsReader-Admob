@@ -74,7 +74,7 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
         initRecyclerView();
         mRecyclerView.setAdapter(mAdapter);
         initPaginate();
-        mPresenter.requestUsers(Message.obtain(this, new Object[]{true}));//打开app时自动加载列表
+        mPresenter.requestNews(Message.obtain(this, new Object[]{true}));//打开app时自动加载列表
     }
 
     @Override
@@ -125,7 +125,7 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
     @Override
     public void onRefresh()
     {
-        mPresenter.requestUsers(Message.obtain(this, new Object[]{true}));
+        mPresenter.requestNews(Message.obtain(this, new Object[]{true}));
     }
 
     /**
@@ -133,8 +133,9 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
      */
     private void initRecyclerView()
     {
+
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        ArtUtils.configRecyclerView(mRecyclerView, new GridLayoutManager(this, 2));
+        ArtUtils.configRecyclerView(mRecyclerView, new GridLayoutManager(this, 1));
     }
 
 
@@ -150,7 +151,7 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
                 @Override
                 public void onLoadMore()
                 {
-                    mPresenter.requestUsers(Message.obtain(NewsActivity.this, new Object[]{false}));
+                    mPresenter.requestNews(Message.obtain(NewsActivity.this, new Object[]{false}));
                 }
 
                 @Override

@@ -22,7 +22,6 @@ import android.support.v4.app.SupportActivity;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,7 +36,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import me.jianbin00.newsreader.mvp.model.NewsRepository;
-import me.jianbin00.newsreader.mvp.model.entity.News;
+import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
 import timber.log.Timber;
 
 /**
@@ -53,11 +52,12 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
 {
     private RxErrorHandler mErrorHandler;
     private RxPermissions mRxPermissions;
-    private List<News> mNews = new ArrayList<>();
+    private List<NewsResponse.ArticlesBean> mNews;
     private DefaultAdapter mAdapter;
-    private String source = "usa-today";
+    private String country = "us";
+    private int page = 1;
     private boolean isFirst = true;
-    //private int preEndIndex;
+    //private int preEndPage;
 
 
     public NewsPresenter(AppComponent appComponent, DefaultAdapter adapter, RxPermissions rxPermissions)
@@ -79,7 +79,7 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
         Timber.d("onCreate");
     }
 
-    public void requestUsers(final Message msg)
+    public void requestNews(final Message msg)
     {
         final boolean pullToRefresh = (boolean) msg.objs[0];
         IView view = msg.getTarget();
@@ -106,7 +106,7 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
         }, mRxPermissions, mErrorHandler);
 
 
-        //if (pullToRefresh) lastUserId = 1;//下拉刷新默认只请求第一页
+        if (pullToRefresh) page = 1;//下拉刷新默认只请求第一页
 
         //关于RxCache缓存库的使用请参考 http://www.jianshu.com/p/b58ef6b0624b
 
@@ -118,7 +118,7 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
             isEvictCache = false;
         }
 
-        mModel.getTopNewsFromSource(source, isEvictCache)
+        mModel.getTopNewsFromCountry(country, page, isEvictCache)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(disposable -> {
@@ -148,26 +148,24 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
                         msg.handleMessageToTarget();//方法最后必须调HandleMessageToTarget,将消息所有引用清空后回收进消息池
                     }
                 })
-                .subscribe(new ErrorHandleSubscriber<List<News>>(mErrorHandler)
+                .subscribe(new ErrorHandleSubscriber<NewsResponse>(mErrorHandler)
                 {
                     @Override
-                    public void onNext(List<News> news)
+                    public void onNext(NewsResponse newsResponse)
                     {
-                        //lastUserId = users.get(users.size() - 1).getId();//记录最后一个id,用于下一次请求
+                        //lastUserId = users.get(users.size() - 1).getId();//记录最后一个page,用于下一次请求
+                        page++;
+                        if (pullToRefresh) mNews.clear();//如果是下拉刷新则清空列表
 
-                        //if (pullToRefresh) mNews.clear();//如果是下拉刷新则清空列表
-
-                        mNews.clear();//清空列表以刷新
-
-                        //preEndIndex = mNews.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                        mNews.addAll(news);
+                        //preEndPage = mNews.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                        mNews.addAll(newsResponse.getArticles());
 
                         if (pullToRefresh)
                             mAdapter.notifyDataSetChanged();
 
-                        //Jianbin：去除下面代码即只有下拉刷新
-/*                        else
-                            mAdapter.notifyItemRangeInserted(preEndIndex, news.size());*/
+
+                        else
+                            mAdapter.notifyItemRangeInserted(page, newsResponse.getArticles().size());
                     }
                 });
     }

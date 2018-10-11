@@ -29,5 +29,5 @@ import org.simple.eventbus.EventBus;
  */
 public interface EventBusTags
 {
-
+    public static final String WEB_URL = "WEB_URL";
 }

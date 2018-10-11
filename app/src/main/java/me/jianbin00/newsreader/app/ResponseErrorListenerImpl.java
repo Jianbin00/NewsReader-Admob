@@ -49,6 +49,7 @@ public class ResponseErrorListenerImpl implements ResponseErrorListener
         //这里不光只能打印错误, 还可以根据不同的错误做出不同的逻辑处理
         //这里只是对几个常用错误进行简单的处理, 展示这个类的用法, 在实际开发中请您自行对更多错误进行更严谨的处理
         String msg = context.getString(R.string.unknown_error);
+        t.printStackTrace();
         if (t instanceof UnknownHostException)
         {
             msg = context.getString(R.string.network_unavailable);
@@ -94,7 +95,7 @@ public class ResponseErrorListenerImpl implements ResponseErrorListener
                 msg = context.getString(R.string.temporary_redirect);
                 break;
             default:
-                msg = httpException.message();
+                msg = context.getString(R.string.error) + httpException.code() + " : " + httpException.message();
                 break;
         }
         return msg;

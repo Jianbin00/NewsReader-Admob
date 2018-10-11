@@ -13,4 +13,6 @@
     <string name="unauthorized">未授权</string>
     <string name="bad_request">错误的请求</string>
     <string name="exit">退出</string>
+    <string name="error">错误</string>
+    <string name="picture">图片</string>
 </resources>

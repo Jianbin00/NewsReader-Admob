@@ -15,12 +15,14 @@
  */
 package me.jianbin00.newsreader.mvp.ui.holder;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import me.jessyan.art.base.BaseHolder;
 import me.jessyan.art.base.DefaultAdapter;
 import me.jessyan.art.di.component.AppComponent;
@@ -28,7 +30,7 @@ import me.jessyan.art.http.imageloader.ImageLoader;
 import me.jessyan.art.http.imageloader.glide.ImageConfigImpl;
 import me.jessyan.art.utils.ArtUtils;
 import me.jianbin00.newsreader.R;
-import me.jianbin00.newsreader.mvp.model.entity.News;
+import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
 
 /**
  * ================================================
@@ -39,9 +41,10 @@ import me.jianbin00.newsreader.mvp.model.entity.News;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class NewsItemHolder extends BaseHolder<News>
+public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
 {
-
+    @BindView(R.id.card_view)
+    CardView mCard;
     @BindView(R.id.iv_image)
     ImageView mImage;
     @BindView(R.id.tv_title)
@@ -50,6 +53,8 @@ public class NewsItemHolder extends BaseHolder<News>
     TextView mSource;
     @BindView(R.id.tv_published_time)
     TextView mPublishedTime;
+    @BindView(R.id.tv_desc)
+    TextView mDesc;
     @BindView(R.id.tv_content)
     TextView mContent;
 
@@ -66,21 +71,24 @@ public class NewsItemHolder extends BaseHolder<News>
     }
 
     @Override
-    public void setData(News data, int position)
+    public void setData(NewsResponse.ArticlesBean data, int position)
     {
-        News.ArticlesBean article = data.getArticles().get(position);
-        mTitle.setText(article.getTitle());
-        mSource.setText(article.getSource().getName());
-        mPublishedTime.setText(article.getPublishedAt());
-        mContent.setText(article.getContent());
+        mTitle.setText(data.getTitle());
+        mSource.setText(data.getSource().getName());
+        mPublishedTime.setText(data.getPublishedAt());
+        mDesc.setText(data.getContent());
+        mContent.setText(data.getContent());
+        mContent.setVisibility(View.INVISIBLE);
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .url(article.getUrl())
+                        .url(data.getUrl())
                         .imageView(mImage)
                         .build());
+
+
     }
 
     /**
@@ -100,4 +108,24 @@ public class NewsItemHolder extends BaseHolder<News>
         this.mAppComponent = null;
         this.mImageLoader = null;
     }
+
+    @OnClick(R.id.share_button)
+    public void share()
+    {
+
+    }
+
+    @OnClick(R.id.view_more)
+    public void showOrHideContent()
+    {
+        if (mContent.getVisibility() == View.VISIBLE)
+        {
+            mContent.setVisibility(View.INVISIBLE);
+        } else
+        {
+            mContent.setVisibility(View.VISIBLE);
+        }
+
+    }
+
 }

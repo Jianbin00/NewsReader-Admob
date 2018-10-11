@@ -15,39 +15,34 @@
  */
 package me.jianbin00.newsreader.mvp.model.entity;
 
-import java.io.Serializable;
-
 import me.jianbin00.newsreader.mvp.model.api.Api;
 
 /**
  * ================================================
  * 如果你服务器返回的数据格式固定为这种方式(这里只提供思想,服务器返回的数据格式可能不一致,可根据自家服务器返回的格式作更改)
- * 指定范型即可改变 {@code data} 字段的类型, 达到重用 {@link BaseResponse}, 如果你实在看不懂, 请忽略
- * <p>
- * Created by JessYan on 26/09/2016 15:19
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * 指定范型即可改变 {@code data} 字段的类型, 达到重用 {@link BaseResponse}
+ * Created by Jianbin 10/8/2018
  * ================================================
  */
-public class BaseResponse<T> implements Serializable
+public class BaseResponse<T> //implements Serializable
 {
-    private T data;
-    private String code;
-    private String msg;
+    String status;
+    int totalResults;
+    T data;
+
+    public String getStatus()
+    {
+        return status;
+    }
+
+    public int getTotalResults()
+    {
+        return totalResults;
+    }
 
     public T getData()
     {
         return data;
-    }
-
-    public String getCode()
-    {
-        return code;
-    }
-
-    public String getMsg()
-    {
-        return msg;
     }
 
     /**
@@ -57,7 +52,7 @@ public class BaseResponse<T> implements Serializable
      */
     public boolean isSuccess()
     {
-        if (code.equals(Api.RequestSuccess))
+        if (status.equals(Api.RequestSuccess))
         {
             return true;
         } else

@@ -15,8 +15,6 @@
  */
 package me.jianbin00.newsreader.mvp.model;
 
-import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
@@ -27,7 +25,7 @@ import me.jessyan.art.mvp.IModel;
 import me.jessyan.art.mvp.IRepositoryManager;
 import me.jianbin00.newsreader.mvp.model.api.cache.CommonCache;
 import me.jianbin00.newsreader.mvp.model.api.service.NewsService;
-import me.jianbin00.newsreader.mvp.model.entity.News;
+import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
 
 /**
  * ================================================
@@ -45,6 +43,7 @@ public class NewsRepository implements IModel
 {
 
     private IRepositoryManager mManager;
+    public static final int USERS_PER_PAGE = 10;
 
     /**
      * 必须含有一个接收IRepositoryManager接口的构造函数,否则会报错
@@ -57,26 +56,26 @@ public class NewsRepository implements IModel
     }
 
 
-    public Observable<List<News>> getTopNewsFromSource(String source, boolean update)
+    public Observable<NewsResponse> getTopNewsFromCountry(String country, int page, boolean update)
     {
         //使用rxcache缓存,上拉刷新则不读取缓存,加载更多读取缓存
         return Observable.just(mManager
                 .createRetrofitService(NewsService.class)
-                .getTopNewsFromSource(source))
-                .flatMap(new Function<Observable<List<News>>, ObservableSource<List<News>>>()
+                .getTopNewsFromCountry(country, page, USERS_PER_PAGE))
+                .flatMap(new Function<Observable<NewsResponse>, ObservableSource<NewsResponse>>()
                 {
+
                     @Override
-                    public ObservableSource<List<News>> apply(@NonNull Observable<List<News>> listObservable) throws Exception
+                    public ObservableSource<NewsResponse> apply(@NonNull Observable<NewsResponse> listObservable) throws Exception
                     {
                         return mManager.createCacheService(CommonCache.class)
                                 .getNews(listObservable
-                                        , new DynamicKey(source)
+                                        , new DynamicKey(page)
                                         , new EvictDynamicKey(update))
                                 .map(listReply -> listReply.getData());
                     }
                 });
     }
-
     @Override
     public void onDestroy()
     {

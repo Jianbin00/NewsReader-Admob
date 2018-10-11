@@ -18,15 +18,10 @@ package me.jianbin00.newsreader.app;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.google.gson.reflect.TypeToken;
-
-import java.util.List;
-
 import me.jessyan.art.http.GlobalHttpHandler;
 import me.jessyan.art.http.log.RequestInterceptor;
-import me.jessyan.art.utils.ArtUtils;
 import me.jianbin00.newsreader.BuildConfig;
-import me.jianbin00.newsreader.mvp.model.entity.News;
+import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -68,12 +63,13 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler
         {
             try
             {
-                List<News> list = ArtUtils.obtainAppComponentFromContext(context).gson().fromJson(httpResult, new TypeToken<List<News>>()
-                {
-                }.getType());
-                News news = list.get(0);
-                Timber.w("Status ------> " + news.getStatus() + "    ||   TotalResults------> " + news.getTotalResults());
+                //List<Article> list = ArtUtils.obtainAppComponentFromContext(context).gson().fromJson(httpResult, new TypeToken<List<Article>>(){}.getType());
+
+                NewsResponse newsResponse = NewsResponse.objectFromData(httpResult);
+
+                Timber.w("Status ---> " + newsResponse.getStatus() + " totalResult --->" + newsResponse.getTotalResults());
             } catch (Exception e)
+
             {
                 e.printStackTrace();
                 return response;

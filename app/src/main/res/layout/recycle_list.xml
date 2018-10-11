@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.jessyan.art.widget.autolayout.AutoCardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                               xmlns:app="http://schemas.android.com/apk/res-auto"
-                                               xmlns:tools="http://schemas.android.com/tools"
-                                               android:layout_width="match_parent"
-                                               android:layout_height="wrap_content"
-                                               android:layout_margin="8dp"
+<android.support.v7.widget.CardView android:id="@+id/card_view"
+                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    xmlns:tools="http://schemas.android.com/tools"
+                                    xmlns:android="http://schemas.android.com/apk/res/android"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
 
     >
 
@@ -12,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
+
 
         <TextView
             android:id="@+id/tv_source"
@@ -21,7 +23,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/iv_image"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             tools:text="BBC News"/>
@@ -36,12 +38,12 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/iv_image"
             app:layout_constraintTop_toTopOf="@+id/iv_image"
-            tools:text="China gripped by rare prison break"/>
+            tools:text="Donald Trump and a world of disorder"/>
 
         <ImageView
             android:id="@+id/iv_image"
@@ -56,7 +58,7 @@
             tools:src="#000000"/>
 
         <TextView
-            android:id="@+id/tv_content"
+            android:id="@+id/tv_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -68,11 +70,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_image"
-            tools:text="Image copyright China National Radio Image caption Zhang Guilin (L) and Wang Lei (R) have escaped a prison in northeastern Liaoning province In China, prison escapes are few and far between. So the case of two men escaping from a Liaoning prison has turned in……"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_source"
+            tools:text="The Trump administration stands accused of being a bystander to lawlessness around the world."/>
 
         <TextView
             android:id="@+id/tv_published_time"
@@ -85,13 +87,56 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="16dp"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_source"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/tv_source"
             tools:text="2018-10-05T04:02:38Z"/>
+
+        <ImageButton
+            android:id="@+id/share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="share"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+            app:srcCompat="@drawable/ic_share_black_24dp"/>
+
+        <ImageButton
+            android:id="@+id/view_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="more"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/share_button"
+            app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"/>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/share_button"
+            tools:text="Image copyright Getty Images Image caption Trump has often cut an isolated figure on the world stage At a moment when America has been focussed myopically on the highest court in the land, the Trump administration stands accused of being a bystander to lawles… [+8218 chars]"/>
     </android.support.constraint.ConstraintLayout>
 
 
-</me.jessyan.art.widget.autolayout.AutoCardView>
+</android.support.v7.widget.CardView>

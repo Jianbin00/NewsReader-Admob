@@ -22,7 +22,7 @@ import java.util.List;
 import me.jessyan.art.base.BaseHolder;
 import me.jessyan.art.base.DefaultAdapter;
 import me.jianbin00.newsreader.R;
-import me.jianbin00.newsreader.mvp.model.entity.News;
+import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
 import me.jianbin00.newsreader.mvp.ui.holder.NewsItemHolder;
 
 /**
@@ -34,15 +34,15 @@ import me.jianbin00.newsreader.mvp.ui.holder.NewsItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class NewsAdapter extends DefaultAdapter<News>
+public class NewsAdapter extends DefaultAdapter<NewsResponse.ArticlesBean>
 {
-    public NewsAdapter(List<News> infos)
+    public NewsAdapter(List<NewsResponse.ArticlesBean> infos)
     {
         super(infos);
     }
 
     @Override
-    public BaseHolder<News> getHolder(View v, int viewType)
+    public BaseHolder<NewsResponse.ArticlesBean> getHolder(View v, int viewType)
     {
         return new NewsItemHolder(v);
     }
@@ -52,4 +52,6 @@ public class NewsAdapter extends DefaultAdapter<News>
     {
         return R.layout.recycle_list;
     }
+
+
 }

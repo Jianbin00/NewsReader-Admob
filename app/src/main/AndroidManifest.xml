@@ -41,6 +41,8 @@
             android:name="me.jianbin00.newsreader.app.GlobalConfiguration"
             android:value="ConfigModule"/>
 
+        <activity android:name=".mvp.ui.activity.WebActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -15,11 +15,9 @@
  */
 package me.jianbin00.newsreader.mvp.model.api.service;
 
-import java.util.List;
-
 import io.reactivex.Observable;
 import me.jianbin00.newsreader.BuildConfig;
-import me.jianbin00.newsreader.mvp.model.entity.News;
+import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -40,19 +38,19 @@ public interface NewsService
     String API_HEADER = "X-Api-Key";
     String API_KEY = BuildConfig.NEWSAPI_KEY;
 
-    @Headers({API_HEADER + API_KEY})
+    /*@Headers({API_HEADER + API_KEY})
     @GET("/v2/top-headlines")
-    Observable<List<News>> getTopNewsFromSource(@Query("sources") String source);
+    Observable<List<Article>> getTopNewsFromSource(@Query("sources") String source,@Query("pageSize")int pageSize);*/
 
-    @Headers({API_HEADER + API_KEY})
-    @GET("/v2/top-headlines")
-    Observable<List<News>> getTopNewsFromCountry(@Query("country") String country);
+    @Headers(API_HEADER + ":" + API_KEY)
+    @GET("v2/top-headlines")
+    Observable<NewsResponse> getTopNewsFromCountry(@Query("country") String country, @Query("page") int page, @Query("pageSize") int pageSize);
 
-    @Headers({API_HEADER + API_KEY})
+    @Headers({API_HEADER + ":" + API_KEY})
     @GET("/v2/top-headlines")
-    Observable<List<News>> getTopNewsFromLanguage(@Query("language") String language);
+    Observable<NewsResponse> getTopNewsFromLanguage(@Query("language") String language, @Query("page") int page, @Query("pageSize") int pageSize);
 
-    @Headers({API_HEADER + API_KEY})
+    @Headers({API_HEADER + ":" + API_KEY})
     @GET("/v2/top-headlines")
-    Observable<List<News>> getTopNewsFromCategoryAndCountry(@Query("category") String category, @Query("country") String country);
+    Observable<NewsResponse> getTopNewsFromCategoryAndCountry(@Query("category") String category, @Query("language") String country, @Query("page") int page, @Query("pageSize") int pageSize);
 }
