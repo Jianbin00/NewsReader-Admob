@@ -15,11 +15,15 @@
  */
 package me.jianbin00.newsreader.mvp.ui.holder;
 
-import android.support.v7.widget.CardView;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,7 +34,9 @@ import me.jessyan.art.http.imageloader.ImageLoader;
 import me.jessyan.art.http.imageloader.glide.ImageConfigImpl;
 import me.jessyan.art.utils.ArtUtils;
 import me.jianbin00.newsreader.R;
+import me.jianbin00.newsreader.app.EventBusTags;
 import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
+import me.jianbin00.newsreader.mvp.ui.activity.WebActivity;
 
 /**
  * ================================================
@@ -43,8 +49,6 @@ import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
  */
 public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
 {
-    @BindView(R.id.card_view)
-    CardView mCard;
     @BindView(R.id.iv_image)
     ImageView mImage;
     @BindView(R.id.tv_title)
@@ -61,12 +65,17 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
+    private Context mContext;
+
+    private String newsUrl;
+    private int contentHeight;
 
     public NewsItemHolder(View itemView)
     {
         super(itemView);
+        mContext = itemView.getContext();
         //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
-        mAppComponent = ArtUtils.obtainAppComponentFromContext(itemView.getContext());
+        mAppComponent = ArtUtils.obtainAppComponentFromContext(mContext);
         mImageLoader = mAppComponent.imageLoader();
     }
 
@@ -78,16 +87,22 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
         mPublishedTime.setText(data.getPublishedAt());
         mDesc.setText(data.getContent());
         mContent.setText(data.getContent());
-        mContent.setVisibility(View.INVISIBLE);
+        //mContent.setVisibility(View.INVISIBLE);
+        contentHeight = mContent.getHeight();
+        mContent.setHeight(0);
+        newsUrl = data.getUrl();
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
-        mImageLoader.loadImage(itemView.getContext(),
+/*        mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .url(data.getUrl())
+                        .url(data.getUrlToImage())
                         .imageView(mImage)
-                        .build());
-
+                        .build());*/
+        Glide.with(mContext)
+                .load(data.getUrlToImage())
+                .thumbnail(0.1f)
+                .into(mImage);
 
     }
 
@@ -112,20 +127,35 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     @OnClick(R.id.share_button)
     public void share()
     {
-
+        Toast.makeText(mContext, "Share is not yet implement.", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.view_more)
     public void showOrHideContent()
     {
-        if (mContent.getVisibility() == View.VISIBLE)
+/*        if (mContent.getVisibility() == View.VISIBLE)
         {
             mContent.setVisibility(View.INVISIBLE);
         } else
         {
             mContent.setVisibility(View.VISIBLE);
+        }*/
+        if (contentHeight == 0)
+        {
+            mContent.setHeight(contentHeight);
+        } else
+        {
+            mContent.setHeight(0);
         }
 
+    }
+
+    @OnClick(R.id.card_view)
+    public void loadNewsPage()
+    {
+        Intent intent = new Intent(mContext, WebActivity.class);
+        intent.putExtra(EventBusTags.WEB_URL, newsUrl);
+        mContext.startActivity(intent);
     }
 
 }
