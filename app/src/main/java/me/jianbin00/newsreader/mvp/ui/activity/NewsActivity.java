@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -75,6 +76,19 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
         mRecyclerView.setAdapter(mAdapter);
         initPaginate();
         mPresenter.requestNews(Message.obtain(this, new Object[]{true}));//打开app时自动加载列表
+    }
+
+    //Add control the Toolbar.
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        if (getSupportActionBar() != null)
+        {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setLogo(R.drawable.ic_menu_black_24dp);
+        }
     }
 
     @Override

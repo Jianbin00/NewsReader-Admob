@@ -3,7 +3,6 @@ package me.jianbin00.newsreader.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.webkit.WebView;
 
 import butterknife.BindView;
@@ -15,8 +14,8 @@ public class WebActivity extends AppCompatActivity
 {
     @BindView(R.id.webview)
     WebView mwebview;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+/*    @BindView(R.id.toolbar)
+    Toolbar toolbar;*/
 
 
     @Override
@@ -25,7 +24,7 @@ public class WebActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)
         {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
