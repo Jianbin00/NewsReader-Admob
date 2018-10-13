@@ -20,8 +20,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.paginate.Paginate;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -89,6 +92,31 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setLogo(R.drawable.ic_menu_black_24dp);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_news, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case (R.id.explore):
+
+                return true;
+            case (R.id.about):
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.about);
+                builder.setMessage("Author: Jianbin Li /nEmail:lijianbin00@gmail.com /nv1.0.0");
+                builder.create();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

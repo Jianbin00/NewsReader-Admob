@@ -52,5 +52,5 @@ public interface NewsService
 
     @Headers({API_HEADER + ":" + API_KEY})
     @GET("/v2/top-headlines")
-    Observable<NewsResponse> getTopNewsFromCategoryAndCountry(@Query("category") String category, @Query("language") String country, @Query("page") int page, @Query("pageSize") int pageSize);
+    Observable<NewsResponse> getTopNewsFromCategory(@Query("category") String category, @Query("page") int page, @Query("pageSize") int pageSize);
 }

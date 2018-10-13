@@ -76,6 +76,50 @@ public class NewsRepository implements IModel
                     }
                 });
     }
+
+    public Observable<NewsResponse> getTopNewsFromLanguage(String language, int page, boolean update)
+    {
+        return Observable.just(mManager
+                .createRetrofitService(NewsService.class)
+                .getTopNewsFromCategory(language, page, USERS_PER_PAGE))
+                .flatMap(new Function<Observable<NewsResponse>, ObservableSource<NewsResponse>>()
+                {
+
+                    @Override
+                    public ObservableSource<NewsResponse> apply(@NonNull Observable<NewsResponse> listObservable) throws Exception
+                    {
+                        return mManager.createCacheService(CommonCache.class)
+                                .getNews(listObservable
+                                        , new DynamicKey(page)
+                                        , new EvictDynamicKey(update))
+                                .map(listReply -> listReply.getData());
+                    }
+                });
+    }
+
+    public Observable<NewsResponse> getTopNewsFromCategory(String category, int page, boolean update)
+    {
+        return Observable.just(mManager
+                .createRetrofitService(NewsService.class)
+                .getTopNewsFromCategory(category, page, USERS_PER_PAGE))
+                .flatMap(new Function<Observable<NewsResponse>, ObservableSource<NewsResponse>>()
+                {
+
+                    @Override
+                    public ObservableSource<NewsResponse> apply(@NonNull Observable<NewsResponse> listObservable) throws Exception
+                    {
+                        return mManager.createCacheService(CommonCache.class)
+                                .getNews(listObservable
+                                        , new DynamicKey(page)
+                                        , new EvictDynamicKey(update))
+                                .map(listReply -> listReply.getData());
+                    }
+                });
+
+    }
+
+
+
     @Override
     public void onDestroy()
     {
