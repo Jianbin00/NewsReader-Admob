@@ -41,6 +41,7 @@ import me.jessyan.art.utils.Preconditions;
 import me.jianbin00.newsreader.R;
 import me.jianbin00.newsreader.mvp.presenter.NewsPresenter;
 import me.jianbin00.newsreader.mvp.ui.adapter.NewsAdapter;
+import me.jianbin00.newsreader.mvp.ui.fragment.NewsFilterDialogFragment;
 
 
 /**
@@ -90,7 +91,7 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
         {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setLogo(R.drawable.ic_menu_black_24dp);
+            actionBar.setLogo(R.drawable.ic_close_black_24dp);
         }
     }
 
@@ -107,7 +108,8 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
         switch (item.getItemId())
         {
             case (R.id.explore):
-
+                NewsFilterDialogFragment newsFilterDialogFragment = new NewsFilterDialogFragment();
+                newsFilterDialogFragment.show(getSupportFragmentManager(), "filter");
                 return true;
             case (R.id.about):
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

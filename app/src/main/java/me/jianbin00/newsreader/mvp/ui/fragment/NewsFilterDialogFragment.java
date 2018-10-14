@@ -23,14 +23,14 @@ import me.jianbin00.newsreader.mvp.ui.activity.NewsActivity;
  * Jianbin Li
  * 2018/10/12
  */
-public class NewsFilterDialogFlagment extends DialogFragment
+public class NewsFilterDialogFragment extends DialogFragment
 {
 
     Spinner modeSpinner;
     Spinner detailSpinner;
     SharedPreferences preferences;
-    private int mode = 0;
-    private int value = 0;
+    static int mode = 0;
+    static int value = 0;
 
     @NonNull
     @Override

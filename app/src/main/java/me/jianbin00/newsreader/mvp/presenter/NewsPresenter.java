@@ -17,13 +17,18 @@ package me.jianbin00.newsreader.mvp.presenter;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.SupportActivity;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.art.base.DefaultAdapter;
@@ -35,6 +40,8 @@ import me.jessyan.art.utils.PermissionUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import me.jianbin00.newsreader.R;
+import me.jianbin00.newsreader.app.SharedPreferenceTags;
 import me.jianbin00.newsreader.mvp.model.NewsRepository;
 import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
 import timber.log.Timber;
@@ -50,19 +57,22 @@ import timber.log.Timber;
  */
 public class NewsPresenter extends BasePresenter<NewsRepository>
 {
+    //private int preEndPage;
+    private static int mode;
     private RxErrorHandler mErrorHandler;
     private RxPermissions mRxPermissions;
     private List<NewsResponse.ArticlesBean> mNews;
     private DefaultAdapter mAdapter;
-    private String country = "us";
     private int page = 1;
     private boolean isFirst = true;
-    //private int preEndPage;
+    private static int value;
+    private AppComponent appComponent;
 
 
     public NewsPresenter(AppComponent appComponent, DefaultAdapter adapter, RxPermissions rxPermissions)
     {
         super(appComponent.repositoryManager().createRepository(NewsRepository.class));
+        this.appComponent = appComponent;
         this.mAdapter = adapter;
         this.mNews = adapter.getInfos();
         this.mErrorHandler = appComponent.rxErrorHandler();
@@ -118,7 +128,11 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
             isEvictCache = false;
         }
 
-        mModel.getTopNewsFromCountry(country, page, isEvictCache)
+
+        obtainSharedPrefenceValue();
+
+
+        getObservable(getResponseValue(), page, isEvictCache)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(disposable -> {
@@ -177,5 +191,61 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
         this.mAdapter = null;
         this.mNews = null;
         this.mErrorHandler = null;
+    }
+
+
+    private Observable<NewsResponse> getObservable(String responseValue, int page, boolean isEvictCache)
+    {
+        switch (mode)
+        {
+            case 0:
+                return mModel.getTopNewsFromCountry(responseValue, page, isEvictCache);
+            case 1:
+                return mModel.getTopNewsFromCategory(responseValue, page, isEvictCache);
+            default:
+                return mModel.getTopNewsFromLanguage(responseValue, page, isEvictCache);
+        }
+    }
+
+
+    private void obtainSharedPrefenceValue()
+    {
+        SharedPreferences sp = appComponent.application().getSharedPreferences(
+                SharedPreferenceTags.SP_SETTING_FILE_NAME, Context.MODE_PRIVATE
+        );
+        mode = sp.getInt(SharedPreferenceTags.SP_TAG_MODE, -1);
+        if (mode == -1)
+        {
+            //Default Mode is Language and English.
+            mode = 2;
+            List<String> compatibleLanguages = Arrays.asList(appComponent.application().getResources().getStringArray(R.array.language_id));
+            value = compatibleLanguages.indexOf(Locale.getDefault().getDisplayLanguage());
+
+        } else
+        {
+            value = sp.getInt(SharedPreferenceTags.SP_TAG_VALUE, -1);
+        }
+        if (value == -1)
+        {
+            value = 2;
+        }
+    }
+
+    private String getResponseValue()
+    {
+        String[] arrayData;
+        switch (mode)
+        {
+            case 0:
+                arrayData = appComponent.application().getResources().getStringArray(R.array.area_id);
+                break;
+            case 1:
+                arrayData = appComponent.application().getResources().getStringArray(R.array.category);
+                break;
+            default:
+                arrayData = appComponent.application().getResources().getStringArray(R.array.language_id);
+                break;
+        }
+        return arrayData[value];
     }
 }
