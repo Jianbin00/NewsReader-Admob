@@ -43,7 +43,6 @@
 
         <activity
             android:name=".mvp.ui.activity.WebActivity"
-            android:label="@string/title_activity_web2"
             android:theme="@style/AppTheme">
         </activity>
     </application>

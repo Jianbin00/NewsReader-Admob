@@ -17,5 +17,6 @@
     <string name="picture">图片</string>
     <string name="explore">发现</string>
     <string name="about">关于</string>
-    <string name="news_filter_selector">Select the news filter</string>
+    <string name="news_filter_selector">请选择过滤器</string>
+    <string name="reach_end">已到达底部</string>
 </resources>

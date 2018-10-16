@@ -81,7 +81,7 @@ public class NewsRepository implements IModel
     {
         return Observable.just(mManager
                 .createRetrofitService(NewsService.class)
-                .getTopNewsFromCategory(language, page, USERS_PER_PAGE))
+                .getTopNewsFromLanguage(language, page, USERS_PER_PAGE))
                 .flatMap(new Function<Observable<NewsResponse>, ObservableSource<NewsResponse>>()
                 {
 

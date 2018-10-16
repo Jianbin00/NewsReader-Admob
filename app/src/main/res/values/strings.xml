@@ -19,4 +19,6 @@
     <string name="explore">explore</string>
     <string name="about">About</string>
     <string name="news_filter_selector">Select the news filter</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="reach_end">Reach the end of the list</string>
 </resources>

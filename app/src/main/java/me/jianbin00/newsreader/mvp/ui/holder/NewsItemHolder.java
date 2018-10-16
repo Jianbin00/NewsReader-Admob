@@ -22,8 +22,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
+import android.widget.ToggleButton;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,8 +34,10 @@ import me.jessyan.art.http.imageloader.glide.ImageConfigImpl;
 import me.jessyan.art.utils.ArtUtils;
 import me.jianbin00.newsreader.R;
 import me.jianbin00.newsreader.app.EventBusTags;
+import me.jianbin00.newsreader.app.utils.DateTransfer;
 import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
 import me.jianbin00.newsreader.mvp.ui.activity.WebActivity;
+import me.jianbin00.newsreader.mvp.ui.animation.OpenCloseAnimators;
 
 /**
  * ================================================
@@ -61,7 +62,8 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     TextView mDesc;
     @BindView(R.id.tv_content)
     TextView mContent;
-
+    @BindView(R.id.show_more)
+    ToggleButton showMoreButton;
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
@@ -84,25 +86,20 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     {
         mTitle.setText(data.getTitle());
         mSource.setText(data.getSource().getName());
-        mPublishedTime.setText(data.getPublishedAt());
-        mDesc.setText(data.getContent());
+        mPublishedTime.setText(DateTransfer.getDateFromTZFormatToLocale(data.getPublishedAt()));
+        mDesc.setText(data.getDescription());
         mContent.setText(data.getContent());
-        //mContent.setVisibility(View.INVISIBLE);
         contentHeight = mContent.getHeight();
-        mContent.setHeight(0);
+        mContent.setVisibility(View.GONE);
         newsUrl = data.getUrl();
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
-/*        mImageLoader.loadImage(itemView.getContext(),
+        mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
                         .url(data.getUrlToImage())
                         .imageView(mImage)
-                        .build());*/
-        Glide.with(mContext)
-                .load(data.getUrlToImage())
-                .thumbnail(0.1f)
-                .into(mImage);
+                        .build());
 
     }
 
@@ -130,22 +127,18 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
         Toast.makeText(mContext, "Share is not yet implement.", Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick(R.id.view_more)
+    @OnClick(R.id.show_more)
     public void showOrHideContent()
     {
-/*        if (mContent.getVisibility() == View.VISIBLE)
+        if (showMoreButton.isChecked())
         {
-            mContent.setVisibility(View.INVISIBLE);
+            OpenCloseAnimators.animOpen(mContent, contentHeight);
+            showMoreButton.setChecked(true);
         } else
         {
-            mContent.setVisibility(View.VISIBLE);
-        }*/
-        if (contentHeight == 0)
-        {
-            mContent.setHeight(contentHeight);
-        } else
-        {
-            mContent.setHeight(0);
+
+            OpenCloseAnimators.animClose(mContent);
+            showMoreButton.setChecked(false);
         }
 
     }

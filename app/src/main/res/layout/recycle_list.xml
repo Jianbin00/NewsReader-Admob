@@ -59,7 +59,7 @@
 
         <TextView
             android:id="@+id/tv_desc"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
@@ -106,21 +106,25 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_desc"
             app:srcCompat="@drawable/ic_share_black_24dp"/>
 
-        <ImageButton
-            android:id="@+id/view_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ToggleButton
+            android:id="@+id/show_more"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/up_down_button"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
             android:contentDescription="more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/share_button"
-            app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"/>
+            android:textOn=""/>
 
         <TextView
             android:id="@+id/tv_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
@@ -130,6 +134,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:padding="8dp"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"

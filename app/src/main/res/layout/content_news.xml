@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    tools:context=".mvp.ui.activity.NewsActivity"
+    tools:showIn="@layout/activity_news"
     >
 
     <android.support.v4.widget.SwipeRefreshLayout

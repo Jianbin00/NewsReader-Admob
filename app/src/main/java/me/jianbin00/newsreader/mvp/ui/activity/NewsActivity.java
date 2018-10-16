@@ -114,8 +114,9 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
             case (R.id.about):
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.about);
-                builder.setMessage("Author: Jianbin Li /nEmail:lijianbin00@gmail.com /nv1.0.0");
+                builder.setMessage("Author: Jianbin Li \nEmail:lijianbin00@gmail.com \nv1.0.0");
                 builder.create();
+                builder.show();
                 return true;
         }
         return super.onOptionsItemSelected(item);

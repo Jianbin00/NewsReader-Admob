@@ -129,10 +129,10 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
         }
 
 
-        obtainSharedPrefenceValue();
+        obtainSharedPreferenceValue();
 
 
-        getObservable(getResponseValue(), page, isEvictCache)
+        getObservable(page, isEvictCache)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(disposable -> {
@@ -168,18 +168,25 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
                     public void onNext(NewsResponse newsResponse)
                     {
                         //lastUserId = users.get(users.size() - 1).getId();//记录最后一个page,用于下一次请求
-                        page++;
-                        if (pullToRefresh) mNews.clear();//如果是下拉刷新则清空列表
 
+                        int totalNewsNum = mNews.size();
+                        page++;
+                        if (pullToRefresh)
+                        {
+                            mNews.clear();//如果是下拉刷新则清空列表
+                        }
                         //preEndPage = mNews.size();//更新之前列表总长度,用于确定加载更多的起始位置
                         mNews.addAll(newsResponse.getArticles());
 
                         if (pullToRefresh)
+                        {
                             mAdapter.notifyDataSetChanged();
-
+                        }
 
                         else
-                            mAdapter.notifyItemRangeInserted(page, newsResponse.getArticles().size());
+                        {
+                            mAdapter.notifyItemRangeInserted(totalNewsNum, newsResponse.getArticles().size());
+                        }
                     }
                 });
     }
@@ -194,21 +201,30 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
     }
 
 
-    private Observable<NewsResponse> getObservable(String responseValue, int page, boolean isEvictCache)
+    private Observable<NewsResponse> getObservable(int page, boolean isEvictCache)
     {
+        Timber.w("mode&value" + mode + " " + value);
+        String[] arrayData;
         switch (mode)
         {
             case 0:
-                return mModel.getTopNewsFromCountry(responseValue, page, isEvictCache);
+                arrayData = appComponent.application().getResources().getStringArray(R.array.area_id);
+                Timber.w(arrayData[value]);
+                return mModel.getTopNewsFromCountry(arrayData[value], page, isEvictCache);
             case 1:
-                return mModel.getTopNewsFromCategory(responseValue, page, isEvictCache);
+                arrayData = appComponent.application().getResources().getStringArray(R.array.category);
+                Timber.w(arrayData[value]);
+                return mModel.getTopNewsFromCategory(arrayData[value], page, isEvictCache);
             default:
-                return mModel.getTopNewsFromLanguage(responseValue, page, isEvictCache);
+                arrayData = appComponent.application().getResources().getStringArray(R.array.language_id);
+                Timber.w(arrayData[value]);
+                return mModel.getTopNewsFromLanguage(arrayData[value], page, isEvictCache);
+
         }
     }
 
 
-    private void obtainSharedPrefenceValue()
+    private void obtainSharedPreferenceValue()
     {
         SharedPreferences sp = appComponent.application().getSharedPreferences(
                 SharedPreferenceTags.SP_SETTING_FILE_NAME, Context.MODE_PRIVATE
@@ -219,8 +235,9 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
             //Default Mode is Language and English.
             mode = 2;
             List<String> compatibleLanguages = Arrays.asList(appComponent.application().getResources().getStringArray(R.array.language_id));
-            value = compatibleLanguages.indexOf(Locale.getDefault().getDisplayLanguage());
-
+            value = compatibleLanguages.indexOf(Locale.getDefault().getLanguage());
+            Timber.w("DisplayLanguage" + Locale.getDefault().getDisplayLanguage());
+            Timber.w("initial mode " + mode + " value " + value);
         } else
         {
             value = sp.getInt(SharedPreferenceTags.SP_TAG_VALUE, -1);
@@ -231,21 +248,4 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
         }
     }
 
-    private String getResponseValue()
-    {
-        String[] arrayData;
-        switch (mode)
-        {
-            case 0:
-                arrayData = appComponent.application().getResources().getStringArray(R.array.area_id);
-                break;
-            case 1:
-                arrayData = appComponent.application().getResources().getStringArray(R.array.category);
-                break;
-            default:
-                arrayData = appComponent.application().getResources().getStringArray(R.array.language_id);
-                break;
-        }
-        return arrayData[value];
-    }
 }

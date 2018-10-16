@@ -9,10 +9,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import me.jessyan.art.mvp.Message;
 import me.jianbin00.newsreader.R;
@@ -26,11 +26,12 @@ import me.jianbin00.newsreader.mvp.ui.activity.NewsActivity;
 public class NewsFilterDialogFragment extends DialogFragment
 {
 
-    Spinner modeSpinner;
-    Spinner detailSpinner;
+    AppCompatSpinner modeSpinner;
+    AppCompatSpinner detailSpinner;
     SharedPreferences preferences;
     static int mode = 0;
     static int value = 0;
+
 
     @NonNull
     @Override
@@ -50,8 +51,8 @@ public class NewsFilterDialogFragment extends DialogFragment
             {
                 preferences = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putInt(SharedPreferenceTags.SP_TAG_MODE, mode);
-                editor.putInt(SharedPreferenceTags.SP_TAG_VALUE, value);
+                editor.putInt(SharedPreferenceTags.SP_TAG_MODE, modeSpinner.getSelectedItemPosition());
+                editor.putInt(SharedPreferenceTags.SP_TAG_VALUE, detailSpinner.getSelectedItemPosition());
                 editor.commit();
                 NewsActivity activity = (NewsActivity) getActivity();
                 activity.obtainPresenter().requestNews(Message.obtain(activity, new Object[]{true}));
@@ -74,9 +75,9 @@ public class NewsFilterDialogFragment extends DialogFragment
         super.onViewCreated(view, savedInstanceState);
         modeSpinner = view.findViewById(R.id.spinner_mode);
         detailSpinner = view.findViewById(R.id.spinner_detail);
-        ArrayAdapter<CharSequence> modeAdapter = ArrayAdapter.createFromResource(getContext(), R.array.mode, android.R.layout.simple_spinner_item);
+/*        ArrayAdapter<CharSequence> modeAdapter = ArrayAdapter.createFromResource(getContext(), R.array.mode, android.R.layout.simple_spinner_item);
         modeSpinner.setAdapter(modeAdapter);
-        modeSpinner.setSelection(mode);
+        modeSpinner.setSelection(mode);*/
         modeSpinner.setOnItemSelectedListener(new ModeSpinnerListener());
         setDetailSpinner();
 
@@ -84,9 +85,10 @@ public class NewsFilterDialogFragment extends DialogFragment
 
     private void setDetailSpinner()
     {
-        ArrayAdapter<CharSequence> detailAdapter = ArrayAdapter.createFromResource(getContext(), mode, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> detailAdapter = ArrayAdapter.createFromResource(getActivity(), mode, android.R.layout.simple_spinner_item);
+        detailAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         detailSpinner.setAdapter(detailAdapter);
-        detailSpinner.setSelection(value);
+        //detailSpinner.setSelection(value);
         detailSpinner.setOnItemSelectedListener(new DetailSpinnerListener());
     }
 
@@ -100,14 +102,17 @@ public class NewsFilterDialogFragment extends DialogFragment
                 //Country/Area
                 case 0:
                     mode = R.array.area_name;
+                    parent.getItemAtPosition(pos);
                     break;
                 //Category
                 case 1:
                     mode = R.array.category;
+                    parent.getItemAtPosition(pos);
                     break;
                 //Language
                 case 2:
                     mode = R.array.language_name;
+                    parent.getItemAtPosition(pos);
                     break;
             }
 
@@ -125,13 +130,14 @@ public class NewsFilterDialogFragment extends DialogFragment
     {
 
         @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
+        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
         {
-            value = i;
+            //value = i;
+            parent.getItemAtPosition(pos);
         }
 
         @Override
-        public void onNothingSelected(AdapterView<?> adapterView)
+        public void onNothingSelected(AdapterView<?> parent)
         {
 
         }
