@@ -15,8 +15,6 @@ public class WebActivity extends AppCompatActivity
 {
     @BindView(R.id.webview)
     WebView mwebview;
-/*    @BindView(R.id.toolbar)
-    Toolbar toolbar;*/
 
 
     @Override
@@ -25,7 +23,7 @@ public class WebActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         ButterKnife.bind(this);
-        //setSupportActionBar(toolbar);
+
         if (getSupportActionBar() != null)
         {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

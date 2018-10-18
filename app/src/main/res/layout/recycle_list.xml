@@ -18,7 +18,7 @@
         <TextView
             android:id="@+id/tv_source"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
@@ -30,12 +30,14 @@
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="225dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -72,32 +74,32 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_source"
+            app:layout_constraintTop_toBottomOf="@+id/tv_published_time"
             tools:text="The Trump administration stands accused of being a bystander to lawlessness around the world."/>
 
         <TextView
             android:id="@+id/tv_published_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginEnd="8dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/black"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_source"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/tv_source"
+            app:layout_constraintStart_toStartOf="@+id/tv_source"
+            app:layout_constraintTop_toBottomOf="@+id/tv_source"
             tools:text="2018-10-05T04:02:38Z"/>
 
         <ImageButton
             android:id="@+id/share_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -108,23 +110,22 @@
 
         <ToggleButton
             android:id="@+id/show_more"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:background="@drawable/up_down_button"
             android:checked="false"
+            android:contentDescription="more"
             android:text=""
             android:textOff=""
-            android:contentDescription="more"
+            android:textOn=""
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/share_button"
-            android:textOn=""/>
+            app:layout_constraintTop_toTopOf="@+id/share_button"/>
 
         <TextView
             android:id="@+id/tv_content"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"

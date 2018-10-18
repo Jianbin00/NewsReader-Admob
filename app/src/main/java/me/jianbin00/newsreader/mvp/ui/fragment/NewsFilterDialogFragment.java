@@ -1,9 +1,7 @@
 package me.jianbin00.newsreader.mvp.ui.fragment;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,23 +12,31 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import me.jessyan.art.mvp.Message;
+import me.jessyan.art.utils.DataHelper;
 import me.jianbin00.newsreader.R;
 import me.jianbin00.newsreader.app.SharedPreferenceTags;
 import me.jianbin00.newsreader.mvp.ui.activity.NewsActivity;
+import timber.log.Timber;
 
 /**
  * Jianbin Li
  * 2018/10/12
  */
-public class NewsFilterDialogFragment extends DialogFragment
+public class NewsFilterDialogFragment extends DialogFragment implements AdapterView.OnItemSelectedListener
 {
-
+    @BindView(R.id.spinner_mode)
     AppCompatSpinner modeSpinner;
+    @BindView(R.id.spinner_detail)
     AppCompatSpinner detailSpinner;
-    SharedPreferences preferences;
+
+    Unbinder unbinder;
     static int mode = 0;
     static int value = 0;
+    int modeArrayId;
 
 
     @NonNull
@@ -38,22 +44,32 @@ public class NewsFilterDialogFragment extends DialogFragment
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
     {
         View v = View.inflate(getContext(), R.layout.fragment_spinner, null);
+        unbinder = ButterKnife.bind(this, v);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.news_filter_selector);
+        mode = DataHelper.getIntergerSF(getContext(), SharedPreferenceTags.SP_TAG_MODE);
+        value = DataHelper.getIntergerSF(getContext(), SharedPreferenceTags.SP_TAG_VALUE);
+        modeSpinner.setOnItemSelectedListener(this);
+        setDetailSpinner(modeArrayId);
+
+
         builder.setView(v);
-        preferences = getActivity().getSharedPreferences(SharedPreferenceTags.SP_SETTING_FILE_NAME, Context.MODE_PRIVATE);
+
+/*        preferences = getActivity().getSharedPreferences(SharedPreferenceTags.SP_SETTING_FILE_NAME, Context.MODE_PRIVATE);
         mode = preferences.getInt(SharedPreferenceTags.SP_TAG_MODE, 0);
-        value = preferences.getInt(SharedPreferenceTags.SP_TAG_VALUE, 0);
+        value = preferences.getInt(SharedPreferenceTags.SP_TAG_VALUE, 0);*/
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                preferences = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
+                DataHelper.setIntergerSF(getContext(), SharedPreferenceTags.SP_TAG_MODE, modeSpinner.getSelectedItemPosition());
+                DataHelper.setIntergerSF(getContext(), SharedPreferenceTags.SP_TAG_VALUE, detailSpinner.getSelectedItemPosition());
+/*                preferences = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt(SharedPreferenceTags.SP_TAG_MODE, modeSpinner.getSelectedItemPosition());
                 editor.putInt(SharedPreferenceTags.SP_TAG_VALUE, detailSpinner.getSelectedItemPosition());
-                editor.commit();
+                editor.commit();*/
                 NewsActivity activity = (NewsActivity) getActivity();
                 activity.obtainPresenter().requestNews(Message.obtain(activity, new Object[]{true}));
             }
@@ -69,54 +85,48 @@ public class NewsFilterDialogFragment extends DialogFragment
         return builder.create();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
-        modeSpinner = view.findViewById(R.id.spinner_mode);
-        detailSpinner = view.findViewById(R.id.spinner_detail);
-/*        ArrayAdapter<CharSequence> modeAdapter = ArrayAdapter.createFromResource(getContext(), R.array.mode, android.R.layout.simple_spinner_item);
-        modeSpinner.setAdapter(modeAdapter);
-        modeSpinner.setSelection(mode);*/
-        modeSpinner.setOnItemSelectedListener(new ModeSpinnerListener());
-        setDetailSpinner();
 
-    }
-
-    private void setDetailSpinner()
+    private void setDetailSpinner(int modeArrayId)
     {
-        ArrayAdapter<CharSequence> detailAdapter = ArrayAdapter.createFromResource(getActivity(), mode, android.R.layout.simple_spinner_item);
-        detailAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Timber.w("modeArrayId is?" + modeArrayId);
+        ArrayAdapter<CharSequence> detailAdapter = ArrayAdapter.createFromResource(getActivity(), modeArrayId, android.R.layout.simple_spinner_item);
+        //detailAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         detailSpinner.setAdapter(detailAdapter);
         //detailSpinner.setSelection(value);
-        detailSpinner.setOnItemSelectedListener(new DetailSpinnerListener());
+        detailSpinner.setOnItemSelectedListener(this);
     }
 
-    private class ModeSpinnerListener implements AdapterView.OnItemSelectedListener
-    {
+
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
         {
-            switch (pos)
+            if (id == R.id.spinner_mode)
             {
-                //Country/Area
-                case 0:
-                    mode = R.array.area_name;
-                    parent.getItemAtPosition(pos);
-                    break;
-                //Category
-                case 1:
-                    mode = R.array.category;
-                    parent.getItemAtPosition(pos);
-                    break;
-                //Language
-                case 2:
-                    mode = R.array.language_name;
-                    parent.getItemAtPosition(pos);
-                    break;
-            }
+                switch (pos)
+                {
+                    //Country/Area
+                    case 0:
+                        modeArrayId = R.array.area_name;
+                        parent.getItemAtPosition(pos);
+                        break;
+                    //Category
+                    case 1:
+                        modeArrayId = R.array.category;
+                        parent.getItemAtPosition(pos);
+                        break;
+                    //Language
+                    case 2:
+                        modeArrayId = R.array.language_name;
+                        parent.getItemAtPosition(pos);
+                        break;
+                }
 
-            setDetailSpinner();
+                setDetailSpinner(modeArrayId);
+            } else
+            {
+                parent.getItemAtPosition(pos);
+            }
         }
 
         @Override
@@ -124,24 +134,12 @@ public class NewsFilterDialogFragment extends DialogFragment
         {
 
         }
-    }
 
-    private class DetailSpinnerListener implements AdapterView.OnItemSelectedListener
+    @Override
+    public void onDestroyView()
     {
 
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-        {
-            //value = i;
-            parent.getItemAtPosition(pos);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent)
-        {
-
-        }
+        super.onDestroyView();
+        unbinder.unbind();
     }
-
-
 }

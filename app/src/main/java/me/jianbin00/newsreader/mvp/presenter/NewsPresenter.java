@@ -17,8 +17,6 @@ package me.jianbin00.newsreader.mvp.presenter;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.SupportActivity;
 
@@ -36,6 +34,7 @@ import me.jessyan.art.di.component.AppComponent;
 import me.jessyan.art.mvp.BasePresenter;
 import me.jessyan.art.mvp.IView;
 import me.jessyan.art.mvp.Message;
+import me.jessyan.art.utils.DataHelper;
 import me.jessyan.art.utils.PermissionUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -226,26 +225,25 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
 
     private void obtainSharedPreferenceValue()
     {
-        SharedPreferences sp = appComponent.application().getSharedPreferences(
-                SharedPreferenceTags.SP_SETTING_FILE_NAME, Context.MODE_PRIVATE
-        );
-        mode = sp.getInt(SharedPreferenceTags.SP_TAG_MODE, -1);
+        mode = DataHelper.getIntergerSF(appComponent.application(), SharedPreferenceTags.SP_TAG_MODE);
         if (mode == -1)
         {
             //Default Mode is Language and English.
             mode = 2;
             List<String> compatibleLanguages = Arrays.asList(appComponent.application().getResources().getStringArray(R.array.language_id));
             value = compatibleLanguages.indexOf(Locale.getDefault().getLanguage());
-            Timber.w("DisplayLanguage" + Locale.getDefault().getDisplayLanguage());
-            Timber.w("initial mode " + mode + " value " + value);
+            DataHelper.setIntergerSF(appComponent.application(), SharedPreferenceTags.SP_TAG_MODE, mode);
         } else
         {
-            value = sp.getInt(SharedPreferenceTags.SP_TAG_VALUE, -1);
+            value = DataHelper.getIntergerSF(appComponent.application(), SharedPreferenceTags.SP_TAG_VALUE);
         }
         if (value == -1)
         {
             value = 2;
+            DataHelper.setIntergerSF(appComponent.application(), SharedPreferenceTags.SP_TAG_VALUE, value);
         }
+
+
     }
 
 }

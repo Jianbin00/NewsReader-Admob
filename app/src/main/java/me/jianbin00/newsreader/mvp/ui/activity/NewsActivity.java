@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +41,7 @@ import me.jianbin00.newsreader.R;
 import me.jianbin00.newsreader.mvp.presenter.NewsPresenter;
 import me.jianbin00.newsreader.mvp.ui.adapter.NewsAdapter;
 import me.jianbin00.newsreader.mvp.ui.fragment.NewsFilterDialogFragment;
+import timber.log.Timber;
 
 
 /**
@@ -82,18 +82,6 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
         mPresenter.requestNews(Message.obtain(this, new Object[]{true}));//打开app时自动加载列表
     }
 
-    //Add control the Toolbar.
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null)
-        {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setLogo(R.drawable.ic_close_black_24dp);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -155,6 +143,7 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
     public void handleMessage(@NonNull Message message)
     {
         Preconditions.checkNotNull(message);
+        Timber.w("MESSAGE:" + message + " message.what:" + message.what);
         switch (message.what)
         {
             case 0:

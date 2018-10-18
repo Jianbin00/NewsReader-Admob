@@ -19,4 +19,6 @@
     <string name="about">关于</string>
     <string name="news_filter_selector">请选择过滤器</string>
     <string name="reach_end">已到达底部</string>
+    <string name="share_with">分享至</string>
+    <string name="share">share</string>
 </resources>

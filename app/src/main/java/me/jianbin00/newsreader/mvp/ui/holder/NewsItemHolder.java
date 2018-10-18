@@ -21,7 +21,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import butterknife.BindView;
@@ -69,8 +68,10 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private Context mContext;
 
+    private String title;
     private String newsUrl;
     private int contentHeight;
+
 
     public NewsItemHolder(View itemView)
     {
@@ -84,7 +85,8 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     @Override
     public void setData(NewsResponse.ArticlesBean data, int position)
     {
-        mTitle.setText(data.getTitle());
+        title = data.getTitle();
+        mTitle.setText(title);
         mSource.setText(data.getSource().getName());
         mPublishedTime.setText(DateTransfer.getDateFromTZFormatToLocale(data.getPublishedAt()));
         mDesc.setText(data.getDescription());
@@ -124,7 +126,11 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     @OnClick(R.id.share_button)
     public void share()
     {
-        Toast.makeText(mContext, "Share is not yet implement.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.putExtra(Intent.EXTRA_TEXT, newsUrl);
+        mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.share_with)));
     }
 
     @OnClick(R.id.show_more)

@@ -2,6 +2,8 @@ package me.jianbin00.mvpart.newsreader;
 
 import org.junit.Test;
 
+import me.jianbin00.newsreader.app.utils.DateTransfer;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -12,8 +14,11 @@ import static org.junit.Assert.assertEquals;
 public class ExampleUnitTest
 {
     @Test
-    public void addition_isCorrect() throws Exception
+    public void DateTransferTest() throws Exception
     {
-        assertEquals(4, 2 + 2);
+        String date = "2018-10-16T03:49:00Z";
+
+        String d = DateTransfer.getDateFromTZFormatToLocale(date);
+        assertEquals("2018/10/16 03:49:00 PST", d);
     }
 }
