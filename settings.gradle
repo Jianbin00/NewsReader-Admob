@@ -1,1 +1,1 @@
-include ':art', ':art-autolayout',':app-admob'
+include ':art',':app-admob'
