@@ -1,4 +1,4 @@
-package me.jianbin00.mvpart.newsreader;
+package me.jianbin00.newsreader;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">News Reader</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="network_unavailable">Network is not available</string>
+    <string name="request_timeout">Request timeout</string>
+    <string name="data_parsing_error">Data parsing error</string>
+    <string name="internal_server_error">Internal Server Error</string>
+    <string name="not_found">Not Found</string>
+    <string name="forbidden">Forbidden</string>
+    <string name="temporary_redirect">Temporary Redirect</string>
+    <string name="too_many_requests">Too Many Requests</string>
+    <string name="unauthorized">Unauthorized</string>
+    <string name="bad_request">Bad Request</string>
+
+    <string name="exit">Exit</string>
+    <string name="error">Error</string>
+    <string name="picture">Picture</string>
+    <string name="explore">explore</string>
+    <string name="about">About</string>
+    <string name="news_filter_selector">Select the news filter</string>
+    <string name="reach_end">Reach the end of the list</string>
+    <string name="share_with">Share with</string>
+    <string name="share">share</string>
+    <string name="more">more</string>
+    <string name="apply">Apply</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_main">MainActivity</string>
+</resources>

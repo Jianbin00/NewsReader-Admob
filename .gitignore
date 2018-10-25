@@ -42,3 +42,6 @@ captures/
 
 # MacOS
 .DS_Store
+
+app/
+art-autolayout/
