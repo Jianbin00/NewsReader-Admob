@@ -15,16 +15,16 @@
  */
 package me.jianbin00.newsreader.mvp.ui.holder;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.aakira.expandablelayout.ExpandableLinearLayout;
+import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -65,18 +65,16 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     @BindView(R.id.tv_content)
     TextView mContent;
     @BindView(R.id.show_more)
-    public ImageButton mShowMoreButton;
-    @BindView(R.id.expandable_content)
-    public ExpandableLinearLayout mExpandableLinearLayout;
-    @BindView(R.id.card_view)
-    CardView mHolder;
+    ImageButton mShowMoreButton;
+    @BindView(R.id.content_holder)
+    ExpandableRelativeLayout mContentHolder;
 
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private Context mContext;
 
-
+    LayoutTransition lt;
     private String title;
     private String newsUrl;
 
@@ -99,10 +97,9 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
         mPublishedTime.setText(DateTransfer.getDateFromTZFormatToLocale(data.getPublishedAt()));
         mDesc.setText(data.getDescription());
 
-        mContent.setText(data.getContent());
-
         newsUrl = data.getUrl();
-
+        mContent.setText(data.getContent());
+        mContentHolder.setClosePosition(1);
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
@@ -135,8 +132,8 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
         this.mDesc = null;
         this.mContent = null;
         this.mShowMoreButton = null;
-        this.mHolder = null;
-        this.mExpandableLinearLayout = null;
+
+
     }
 
     @OnClick(R.id.share)
@@ -152,17 +149,21 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     @OnClick(R.id.show_more)
     public void showOrHideContent()
     {
-/*        Timber.w("mShowMoreButton"+mShowMoreButton.isActivated());
-        mExpandableLinearLayout.toggle();
+        //Timber.w("mShowMoreButton"+mShowMoreButton.isActivated());
+        if (mShowMoreButton.isActivated())
+        {
+            mContentHolder.collapse();
+            mShowMoreButton.setActivated(false);
+        } else
+        {
+
+            mContentHolder.expand();
+            mShowMoreButton.setActivated(true);
+        }
+/*        mContentHolder.toggle();
         mShowMoreButton.setActivated(!mShowMoreButton.isActivated());*/
-        onClickButton(mExpandableLinearLayout);
     }
 
-    @OnClick(R.id.expandable_content)
-    void onClickButton(final ExpandableLinearLayout expandableLinearLayout)
-    {
-        expandableLinearLayout.toggle();
-    }
 
     @OnClick(R.id.card_view)
     public void loadNewsPage()
@@ -177,7 +178,6 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     public void doNothing()
     {
     }
-
 
 
 }

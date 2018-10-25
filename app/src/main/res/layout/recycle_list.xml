@@ -132,11 +132,12 @@
                 android:background="@drawable/up_down_button"
                 android:contentDescription="@string/more"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/share"/>
+                app:layout_constraintTop_toTopOf="@+id/share"
+                />
         </android.support.constraint.ConstraintLayout>
 
-        <com.github.aakira.expandablelayout.ExpandableLinearLayout
-            android:id="@+id/expandable_content"
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/content_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -146,22 +147,20 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="40dp"
-            app:ael_duration="300"
-            app:ael_expanded="false"
-            app:ael_orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:orientation="vertical"
             app:layout_constraintTop_toTopOf="@+id/do_nothing">
 
             <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="400dp"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 tools:text="Image copyright Getty Images Image caption Trump has often cut an isolated figure on the world stage At a moment when America has been focussed myopically on the highest court in the land, the Trump administration stands accused of being a bystander to lawles… [+8218 chars]"/>
-        </com.github.aakira.expandablelayout.ExpandableLinearLayout>
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
     </android.support.constraint.ConstraintLayout>
 
 

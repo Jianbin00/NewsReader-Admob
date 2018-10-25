@@ -15,14 +15,7 @@
  */
 package me.jianbin00.newsreader.mvp.ui.adapter;
 
-import android.animation.ObjectAnimator;
-import android.util.SparseBooleanArray;
 import android.view.View;
-import android.widget.ImageButton;
-
-import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
-import com.github.aakira.expandablelayout.ExpandableLinearLayout;
-import com.github.aakira.expandablelayout.Utils;
 
 import java.util.List;
 
@@ -44,15 +37,11 @@ import me.jianbin00.newsreader.mvp.ui.holder.NewsItemHolder;
 public class NewsAdapter extends DefaultAdapter<NewsResponse.ArticlesBean>
 {
 
-    private SparseBooleanArray expandState = new SparseBooleanArray();
 
     public NewsAdapter(List<NewsResponse.ArticlesBean> infos)
     {
         super(infos);
-        for (int i = 0; i < infos.size(); i++)
-        {
-            expandState.append(i, false);
-        }
+
     }
 
     @Override
@@ -68,42 +57,5 @@ public class NewsAdapter extends DefaultAdapter<NewsResponse.ArticlesBean>
     }
 
 
-    /*Add it for setting up ExpandableLinearLayout
-     * Jianbin*/
 
-    @Override
-    public void onBindViewHolder(BaseHolder<NewsResponse.ArticlesBean> holder, int position)
-    {
-        super.onBindViewHolder(holder, position);
-        holder.setIsRecyclable(false);
-        ExpandableLinearLayout mExpandableLinearLayout = ((NewsItemHolder) holder).mExpandableLinearLayout;
-        ImageButton mShowMoreButton = ((NewsItemHolder) holder).mShowMoreButton;
-        mExpandableLinearLayout.setInRecyclerView(true);
-        mExpandableLinearLayout.setExpanded(expandState.get(position));
-        mExpandableLinearLayout.setListener(new ExpandableLayoutListenerAdapter()
-        {
-            @Override
-            public void onPreOpen()
-            {
-                createRotateAnimator(mShowMoreButton, 0f, 180f).start();
-                expandState.put(position, true);
-            }
-
-            @Override
-            public void onPreClose()
-            {
-                createRotateAnimator(mShowMoreButton, 180f, 0f).start();
-                expandState.put(position, false);
-            }
-        });
-        mShowMoreButton.setRotation(expandState.get(position) ? 180f : 0f);
-    }
-
-    public ObjectAnimator createRotateAnimator(final View target, final float from, final float to)
-    {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(target, "rotation", from, to);
-        animator.setDuration(300);
-        animator.setInterpolator(Utils.createInterpolator(Utils.LINEAR_INTERPOLATOR));
-        return animator;
-    }
 }
