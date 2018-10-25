@@ -159,7 +159,9 @@ public class NewsActivity extends BaseActivity<NewsPresenter> implements IView, 
     @Override
     public void onRefresh()
     {
+        mPresenter.clear();
         mPresenter.requestNews(Message.obtain(this, new Object[]{true}));
+        //mSwipeRefreshLayout.invalidate();
     }
 
     /**

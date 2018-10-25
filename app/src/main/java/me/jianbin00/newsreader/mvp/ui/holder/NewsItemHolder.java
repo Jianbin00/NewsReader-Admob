@@ -17,11 +17,14 @@ package me.jianbin00.newsreader.mvp.ui.holder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+
+import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -36,7 +39,6 @@ import me.jianbin00.newsreader.app.EventBusTags;
 import me.jianbin00.newsreader.app.utils.DateTransfer;
 import me.jianbin00.newsreader.mvp.model.entity.NewsResponse;
 import me.jianbin00.newsreader.mvp.ui.activity.WebActivity;
-import me.jianbin00.newsreader.mvp.ui.animation.OpenCloseAnimators;
 
 /**
  * ================================================
@@ -49,6 +51,7 @@ import me.jianbin00.newsreader.mvp.ui.animation.OpenCloseAnimators;
  */
 public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
 {
+
     @BindView(R.id.iv_image)
     ImageView mImage;
     @BindView(R.id.tv_title)
@@ -62,15 +65,20 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     @BindView(R.id.tv_content)
     TextView mContent;
     @BindView(R.id.show_more)
-    ToggleButton showMoreButton;
+    public ImageButton mShowMoreButton;
+    @BindView(R.id.expandable_content)
+    public ExpandableLinearLayout mExpandableLinearLayout;
+    @BindView(R.id.card_view)
+    CardView mHolder;
+
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private Context mContext;
 
+
     private String title;
     private String newsUrl;
-    private int contentHeight;
 
 
     public NewsItemHolder(View itemView)
@@ -90,9 +98,9 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
         mSource.setText(data.getSource().getName());
         mPublishedTime.setText(DateTransfer.getDateFromTZFormatToLocale(data.getPublishedAt()));
         mDesc.setText(data.getDescription());
+
         mContent.setText(data.getContent());
-        contentHeight = mContent.getHeight();
-        mContent.setVisibility(View.GONE);
+
         newsUrl = data.getUrl();
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
@@ -102,6 +110,7 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
                         .url(data.getUrlToImage())
                         .imageView(mImage)
                         .build());
+
 
     }
 
@@ -121,9 +130,16 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
         this.mTitle = null;
         this.mAppComponent = null;
         this.mImageLoader = null;
+        this.mSource = null;
+        this.mPublishedTime = null;
+        this.mDesc = null;
+        this.mContent = null;
+        this.mShowMoreButton = null;
+        this.mHolder = null;
+        this.mExpandableLinearLayout = null;
     }
 
-    @OnClick(R.id.share_button)
+    @OnClick(R.id.share)
     public void share()
     {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -136,25 +152,32 @@ public class NewsItemHolder extends BaseHolder<NewsResponse.ArticlesBean>
     @OnClick(R.id.show_more)
     public void showOrHideContent()
     {
-        if (showMoreButton.isChecked())
-        {
-            OpenCloseAnimators.animOpen(mContent, contentHeight);
-            showMoreButton.setChecked(true);
-        } else
-        {
+/*        Timber.w("mShowMoreButton"+mShowMoreButton.isActivated());
+        mExpandableLinearLayout.toggle();
+        mShowMoreButton.setActivated(!mShowMoreButton.isActivated());*/
+        onClickButton(mExpandableLinearLayout);
+    }
 
-            OpenCloseAnimators.animClose(mContent);
-            showMoreButton.setChecked(false);
-        }
-
+    @OnClick(R.id.expandable_content)
+    void onClickButton(final ExpandableLinearLayout expandableLinearLayout)
+    {
+        expandableLinearLayout.toggle();
     }
 
     @OnClick(R.id.card_view)
     public void loadNewsPage()
     {
         Intent intent = new Intent(mContext, WebActivity.class);
+        intent.putExtra(EventBusTags.TITLE, title);
         intent.putExtra(EventBusTags.WEB_URL, newsUrl);
         mContext.startActivity(intent);
     }
+
+    @OnClick(R.id.do_nothing)
+    public void doNothing()
+    {
+    }
+
+
 
 }

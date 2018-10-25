@@ -200,23 +200,19 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
     }
 
 
-    private Observable<NewsResponse> getObservable(int page, boolean isEvictCache)
+    public Observable<NewsResponse> getObservable(int page, boolean isEvictCache)
     {
-        Timber.w("mode&value" + mode + " " + value);
         String[] arrayData;
         switch (mode)
         {
             case 0:
                 arrayData = appComponent.application().getResources().getStringArray(R.array.area_id);
-                Timber.w(arrayData[value]);
                 return mModel.getTopNewsFromCountry(arrayData[value], page, isEvictCache);
             case 1:
                 arrayData = appComponent.application().getResources().getStringArray(R.array.category);
-                Timber.w(arrayData[value]);
                 return mModel.getTopNewsFromCategory(arrayData[value], page, isEvictCache);
             default:
                 arrayData = appComponent.application().getResources().getStringArray(R.array.language_id);
-                Timber.w(arrayData[value]);
                 return mModel.getTopNewsFromLanguage(arrayData[value], page, isEvictCache);
 
         }
@@ -244,6 +240,11 @@ public class NewsPresenter extends BasePresenter<NewsRepository>
         }
 
 
+    }
+
+    public void clear()
+    {
+        mNews.clear();
     }
 
 }

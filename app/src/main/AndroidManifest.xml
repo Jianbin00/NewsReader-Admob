@@ -43,6 +43,7 @@
 
         <activity
             android:name=".mvp.ui.activity.WebActivity"
+            android:parentActivityName=".mvp.ui.activity.NewsActivity"
             android:theme="@style/AppTheme">
         </activity>
     </application>

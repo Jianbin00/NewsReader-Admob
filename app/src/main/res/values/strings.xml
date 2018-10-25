@@ -19,8 +19,11 @@
     <string name="explore">explore</string>
     <string name="about">About</string>
     <string name="news_filter_selector">Select the news filter</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="reach_end">Reach the end of the list</string>
     <string name="share_with">Share with</string>
     <string name="share">share</string>
+    <string name="more">more</string>
+    <string name="apply">Apply</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

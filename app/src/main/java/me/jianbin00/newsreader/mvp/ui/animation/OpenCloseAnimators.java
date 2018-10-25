@@ -19,13 +19,43 @@ public class OpenCloseAnimators
 
     public static void animOpen(final View view, int mHiddenViewMeasuredHeight)
     {
-        view.setVisibility(View.VISIBLE);
         view.setAlpha(0);
+        view.setVisibility(View.VISIBLE);
+
+
         if (mOpenValueAnimator == null)
         {
             mOpenValueAnimator = createDropAnim(view, 0, mHiddenViewMeasuredHeight);
+            mOpenValueAnimator.start();
         }
-        mOpenValueAnimator.start();
+
+    }
+
+    public static void animCloseAndShortenParent(final View view, final View parentView)
+    {
+        int origHeight = view.getHeight();
+        view.setAlpha(1);
+        int origParentHeight = view.getHeight();
+        if (mCloseValueAnimator == null)
+        {
+            mCloseValueAnimator = createDropAnim(view, origHeight, 0);
+            mCloseValueAnimator.addListener(new AnimatorListenerAdapter()
+            {
+                @Override
+                public void onAnimationEnd(Animator animation)
+                {
+                    view.setVisibility(View.GONE);
+                }
+            });
+            mCloseValueAnimator.start();
+        }
+
+        if (mCloseValueAnimator == null)
+        {
+            mCloseValueAnimator = createDropAnim(parentView, origParentHeight, origParentHeight - origHeight);
+            mCloseValueAnimator.start();
+        }
+
     }
 
     public static void animClose(final View view)
@@ -43,8 +73,10 @@ public class OpenCloseAnimators
                     view.setVisibility(View.GONE);
                 }
             });
+
         }
         mCloseValueAnimator.start();
+
     }
 
     /**

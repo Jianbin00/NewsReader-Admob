@@ -30,5 +30,6 @@ import org.simple.eventbus.EventBus;
 public interface EventBusTags
 {
     String WEB_URL = "WEB_URL";
+    String TITLE = "title";
 
 }

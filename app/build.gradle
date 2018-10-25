@@ -68,7 +68,10 @@ dependencies {
     //Github 仓库上最新的 Demo 具有下一个版本的新特性, 所以依赖最新的远程库会出现版本不兼容的情况, 详情请查看 https://github.com/JessYanCoding/MVPArms/wiki/Issues#2
 //    implementation 'me.jessyan:art:2.4.1'
 
-    implementation 'com.github.ikidou:TypeBuilder:1.0'
+    //UI
+    implementation 'com.pl:wheelview:0.7.2'
+    implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
+
     //test
     testImplementation rootProject.ext.dependencies["junit"]
     debugImplementation rootProject.ext.dependencies["canary-debug"]
